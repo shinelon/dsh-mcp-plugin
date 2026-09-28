@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Manage DSH MCP servers from the web settings panel: list, add, edit, remove, enable/disable, with live fiber status.",
+  "description": "Manage DSH MCP servers from the web settings panel: list, add, edit, remove, enable/disable, with live status. · 在 Web 设置面板管理 DSH 的 MCP 服务器：实时状态、新增、编辑、删除、启用/禁用。",
   "keywords": [
     "deepseek-harness",
     "dsh",
@@ -13,6 +13,13 @@
   ],
   "license": "MIT",
   "icon": "./icon.svg",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shinelon/dsh-mcp-plugin.git"
+  },
+  "engines": {
+    "node": ">=22"
+  },
   "exports": {
     ".": "./src/host/index.js",
     "./client": "./lib/client.js",
@@ -28,6 +35,9 @@
     "locale/*.json"
   ],
   "dsh": {
+    "engines": {
+      "dsh": ">=0.1.7-rc.2"
+    },
     "bundle": {
       "patch": "./cordis.patch.yml"
     },
@@ -50,6 +60,7 @@
     "yaml": "^2.9.1"
   },
   "peerDependencies": {
+    "@deepseek-ai/dsh": ">=0.1.7-rc.2",
     "react": "^18.2.0"
   },
   "devDependencies": {
