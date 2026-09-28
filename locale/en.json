@@ -1,0 +1,4 @@
+{
+  "title": "MCP Servers",
+  "description": "Manage DSH MCP servers: view status, add, edit, remove, enable/disable. Changes hot-reload live."
+}

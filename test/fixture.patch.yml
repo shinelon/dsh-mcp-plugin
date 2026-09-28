@@ -1,0 +1,57 @@
+# Your patch layer for this dsh profile, applied after every bundle layer:
+# a top-level YAML array of loader patch entries (id-targeted config
+# overrides, disables, and insert lists; `!!js` expressions allowed).
+#
+# ── MCP servers ─────────────────────────────────────────────────────────────
+# Each server is one dsh-mcp-client instance; model tool names become
+# mcp__<serverName>__<raw>. HMR reconnects on edit — no restart needed.
+- insert:
+    # web-search-prime — remote, 智谱
+    - id: mcp-web-search-prime
+      name: "@deepseek-ai/dsh-mcp-client"
+      config:
+        serverName: web-search-prime
+        transport: streamable-http
+        url: https://open.bigmodel.cn/api/mcp/web_search_prime/mcp
+        headers:
+          Authorization: !!js "`Bearer ${process.env.ZHIPU_API_KEY}`"
+
+    # web-reader — remote, 智谱
+    - id: mcp-web-reader
+      name: "@deepseek-ai/dsh-mcp-client"
+      config:
+        serverName: web-reader
+        transport: streamable-http
+        url: https://open.bigmodel.cn/api/mcp/web_reader/mcp
+        headers:
+          Authorization: !!js "`Bearer ${process.env.ZHIPU_API_KEY}`"
+
+    # codegraph — local stdio (command is on PATH)
+    - id: mcp-codegraph
+      name: "@deepseek-ai/dsh-mcp-client"
+      config:
+        serverName: codegraph
+        transport: stdio
+        command: codegraph
+        args: [ "serve", "--mcp" ]
+
+    # sensenova-vision — local stdio (commented out on purpose)
+    # - id: mcp-sensenova-vision
+    #   name: '@deepseek-ai/dsh-mcp-client'
+    #   config:
+    #     serverName: sensenova-vision
+    #     command: node
+
+- id: ui-settings-general
+  name: "@deepseek-ai/dsh-client-ui-settings-general"
+  config:
+    welcomeNoticeVersion: 2026-08-13.1
+- id: llm-pi-ai
+  name: "@deepseek-ai/dsh-llm-pi-ai"
+  config:
+    providers:
+      zai-coding-cn:
+        apiKeyEnv: ZAI_CODING_CN_API_KEY
+      sensenova:
+        apiKeyEnv: SENSENOVA_API_KEY
+        api: openai-completions
