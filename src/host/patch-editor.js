@@ -299,9 +299,11 @@ export function upsertOverrideRow(doc, patch) {
  */
 export function serializeVerified(doc) {
   if (isSeq(doc.contents)) doc.contents.flow = false
-  const text = String(doc)
+  // Unlimited line width: long `!!js` URLs must not fold mid-token, which
+  // makes hand-editing the patch awkward.
+  const text = doc.toString({ lineWidth: 0 })
   const check = parsePatchText(text)
-  return String(check)
+  return check.toString({ lineWidth: 0 })
 }
 
 /** Paths already backed up in this process (one backup per process, not per write). */

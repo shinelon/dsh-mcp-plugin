@@ -143,6 +143,22 @@ function configForId(docRows, entryById, id) {
 }
 
 /**
+ * Display target for one config: the plain url/command, or the raw `!!js`
+ * expression source (truncated) when the value is an expression.
+ * @param {Record<string, unknown>} record
+ * @returns {string}
+ */
+function displayTarget(record) {
+  const source = isJsExpr(record.url) ? record.url.__js
+    : isJsExpr(record.command) ? record.command.__js
+      : undefined
+  if (source !== undefined) return source.length > 72 ? `${source.slice(0, 69)}...` : source
+  if (typeof record.url === 'string' && !isJsExpr(record.url)) return record.url
+  if (typeof record.command === 'string' && !isJsExpr(record.command)) return record.command
+  return ''
+}
+
+/**
  * Build the list view: every id across the patch document and the live loader
  * entries, document-truth config joined with fiber status.
  * @param {import('@deepseek-ai/cordis').Context} ctx
@@ -180,9 +196,7 @@ async function listServers(ctx) {
       id,
       serverName,
       transport: record.transport === 'streamable-http' ? 'streamable-http' : 'stdio',
-      target: typeof record.url === 'string' && !isJsExpr(record.url)
-        ? record.url
-        : typeof record.command === 'string' && !isJsExpr(record.command) ? record.command : '',
+      target: displayTarget(record),
       enabled: !disabledFlag,
       status,
       errorText: status === 'failed' ? bestEffortError(entry) : '',
